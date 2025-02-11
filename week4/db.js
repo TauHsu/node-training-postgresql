@@ -36,7 +36,7 @@ const CreditPackage = new EntitySchema({
 });
 const Skill = new EntitySchema({
   name: "Skill",
-  tableName: "Skill",
+  tableName: "SKILL",
   columns: {
     id: {
       primary: true,
