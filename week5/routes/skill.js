@@ -33,12 +33,8 @@ router.post('/', async (req,res,next) => {
         };
 
         const skillRepo = await dataSource.getRepository('Skill')
-        const existSkill = await skillRepo.find({
-            where: {
-                name
-            }
-        });
-        if(existSkill.length > 0){
+        const existSkill = await skillRepo.findOneBy({ name });
+        if(existSkill){
             res.status(409).json({
                 status: 'failed',
                 message: '資料重複'
@@ -60,7 +56,7 @@ router.post('/', async (req,res,next) => {
 
 router.delete('/:skillId', async (req,res,next) => {
     try{
-        const skillId = req.params;
+        const { skillId } = req.params;
         if(isUndefined(skillId) || isNotValidString(skillId)){
             res.status(400).json({
                 status: 'failed',

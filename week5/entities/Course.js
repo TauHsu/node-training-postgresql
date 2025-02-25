@@ -65,5 +65,19 @@ module.exports = new EntitySchema({
         updateDate: true,
         nullable: false
         }
+    },
+    relations: {
+        User: {
+            target: 'User',
+            type: 'many-to-one',
+            joinColumn: { name: 'user_id' },
+            inverseSide: 'courses'
+        },
+        Skill: {
+            target: 'Skill',
+            type: 'many-to-one',
+            joinColumn: { name: 'skill_id' },
+            inverseSide: 'courses'
+        }
     }
 });

@@ -23,23 +23,28 @@ router.get('/', async (req,res,next) => {
 
         if (isUndefined(perNumber) || isNotValidInteger(perNumber) ||
             isUndefined(pageNumber) || isNotValidInteger(pageNumber) ) {
-            return res.status(400).json({
+            res.status(400).json({
                 status: 'failed',
                 message: 'per 和 page 必須是正整數'
             });
-        }
+            return;
+        };
+
+        if(isUndefined(skip) || skip < 0){
+            res.status(400).json({
+                status: 'failed',
+                message: 'skip 最小值為0'
+            });
+            return;
+        };
 
         // 取得教練列表
         const coach = await dataSource.getRepository('Coach').find({
             select: {
                 id: true,
-                User: {
-                    name: true
-                }
+                User: { name: true }
             },
-            relations: {
-                User: true
-            },
+            relations: { User: true },
             take: perNumber,  // 限制回傳筆數
             skip,
             order: { created_at: 'DESC' } // 讓最新的資料排前面
@@ -85,7 +90,6 @@ router.get('/:coachId', async (req,res,next) => {
             status: 'success',
             data: coach
         });
-
     }catch(error){
         logger.error(error);
         next(error);
